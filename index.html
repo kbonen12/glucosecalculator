@@ -25,7 +25,7 @@
     .yellow {
       background-color: #ffff99;
     }
-    input {
+    input, select {
       width: 100%;
       box-sizing: border-box;
     }
@@ -73,8 +73,14 @@
       <td class="yellow"><input id="desiredPercent" type="text" readonly></td>
     </tr>
     <tr>
-      <td class="green">Fluid Volume (L)</td>
-      <td class="green"><input id="fluidVolume" type="number" step="any" placeholder="0"></td>
+      <td class="green">Fluid Volume</td>
+      <td class="green">
+        <input id="fluidVolume" type="number" step="any" placeholder="0">
+        <select id="volumeUnit">
+          <option value="mL" selected>mL</option>
+          <option value="L">L</option>
+        </select>
+      </td>
     </tr>
     <tr>
       <td class="green">Stock Concentration (%)</td>
@@ -121,16 +127,24 @@
       const fluidRate = parseFloat(document.getElementById("fluidRate").value);
       const doseRate = parseFloat(document.getElementById("doseRate").value);
       const weight = parseFloat(document.getElementById("weight").value);
-      const fluidVolume = parseFloat(document.getElementById("fluidVolume").value);
+      const fluidVolumeInput = parseFloat(document.getElementById("fluidVolume").value);
+      const volumeUnit = document.getElementById("volumeUnit").value;
       const stockPercent = parseFloat(document.getElementById("stockPercent").value);
 
       const output1 = document.getElementById("desiredPercent");
       const output2 = document.getElementById("doseToAdd");
 
-      if ([fluidRate, doseRate, weight, fluidVolume, stockPercent].some(x => isNaN(x) || x <= 0)) {
+      if ([fluidRate, doseRate, weight, fluidVolumeInput, stockPercent].some(x => isNaN(x) || x <= 0)) {
         output1.value = "Invalid input";
         output2.value = "Invalid input";
         return;
+      }
+
+      let fluidVolume_L;
+      if (volumeUnit === "mL") {
+        fluidVolume_L = fluidVolumeInput / 1000;
+      } else {
+        fluidVolume_L = fluidVolumeInput;
       }
 
       const fluidRate_mL_min = fluidRate * 1000 / 60;
@@ -138,7 +152,7 @@
       const desiredPercent = requiredConc_mg_mL / 10;
 
       const stock_mg_mL = stockPercent * 10;
-      const doseToAdd_mL = (requiredConc_mg_mL * fluidVolume * 1000) / stock_mg_mL;
+      const doseToAdd_mL = (requiredConc_mg_mL * fluidVolume_L * 1000) / stock_mg_mL;
 
       output1.value = desiredPercent.toFixed(2);
       output2.value = doseToAdd_mL.toFixed(2);
@@ -147,3 +161,4 @@
 
 </body>
 </html>
+
