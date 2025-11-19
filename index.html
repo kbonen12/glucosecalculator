@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Glucose Infusion Rate Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f4f4f4;
+    }
+    table {
+      border-collapse: collapse;
+      width: 500px;
+      background: #ffffff;
+      margin-bottom: 30px;
+    }
+    td, th {
+      padding: 8px;
+      border: 1px solid #ccc;
+    }
+    .green {
+      background-color: #90ee90;
+    }
+    .yellow {
+      background-color: #ffff99;
+    }
+    input {
+      width: 100%;
+      box-sizing: border-box;
+    }
+    input[readonly] {
+      background-color: #ffff99;
+      border: none;
+    }
+    .reference-table {
+      width: 100%;
+      max-width: 800px;
+      background: #fff;
+      table-layout: fixed;
+    }
+    .reference-table th, .reference-table td {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .reference-title {
+      font-weight: bold;
+      margin-top: 40px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Glucose Infusion Rate Calculator</h2>
+
+  <table>
+    <tr>
+      <td class="green">Fluid Rate (L/hr)</td>
+      <td class="green"><input id="fluidRate" type="number" step="any" placeholder="0"></td>
+    </tr>
+    <tr>
+      <td class="green">Dose Rate (mg/kg/min)</td>
+      <td class="green"><input id="doseRate" type="number" step="any" placeholder="0"></td>
+    </tr>
+    <tr>
+      <td class="green">Body Weight (kg)</td>
+      <td class="green"><input id="weight" type="number" step="any" placeholder="0"></td>
+    </tr>
+    <tr>
+      <td class="yellow">Desired Solution (%)</td>
+      <td class="yellow"><input id="desiredPercent" type="text" readonly></td>
+    </tr>
+    <tr>
+      <td class="green">Fluid Volume (L)</td>
+      <td class="green"><input id="fluidVolume" type="number" step="any" placeholder="0"></td>
+    </tr>
+    <tr>
+      <td class="green">Stock Concentration (%)</td>
+      <td class="green"><input id="stockPercent" type="number" step="any" placeholder="0"></td>
+    </tr>
+    <tr>
+      <td class="yellow">Dose to Add (mL)</td>
+      <td class="yellow"><input id="doseToAdd" type="text" readonly></td>
+    </tr>
+  </table>
+
+  <button onclick="calculate()">Calculate</button>
+
+  <div class="reference-title">📘 Reference: Holliday-Segar Formula for Maintenance Fluids</div>
+  <table class="reference-table">
+    <thead>
+      <tr>
+        <th style="width: 25%;">Weight</th>
+        <th style="width: 37.5%;">Daily Fluid Requirement</th>
+        <th style="width: 37.5%;">Hourly Fluid Requirement</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>0–10 kg</td>
+        <td>100 mL/kg/day</td>
+        <td>4 mL/kg/hr</td>
+      </tr>
+      <tr>
+        <td>11–20 kg</td>
+        <td>1,000 + 50 mL/kg/day for each kg &gt;10</td>
+        <td>40 + 2 mL/kg/hr for each kg &gt;10</td>
+      </tr>
+      <tr>
+        <td>&gt; 20 kg</td>
+        <td>1,500 + 20 mL/kg/day for each kg &gt;20</td>
+        <td>60 + 1 mL/kg/hr for each kg &gt;20</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    function calculate() {
+      const fluidRate = parseFloat(document.getElementById("fluidRate").value);
+      const doseRate = parseFloat(document.getElementById("doseRate").value);
+      const weight = parseFloat(document.getElementById("weight").value);
+      const fluidVolume = parseFloat(document.getElementById("fluidVolume").value);
+      const stockPercent = parseFloat(document.getElementById("stockPercent").value);
+
+      const output1 = document.getElementById("desiredPercent");
+      const output2 = document.getElementById("doseToAdd");
+
+      if ([fluidRate, doseRate, weight, fluidVolume, stockPercent].some(x => isNaN(x) || x <= 0)) {
+        output1.value = "Invalid input";
+        output2.value = "Invalid input";
+        return;
+      }
+
+      const fluidRate_mL_min = fluidRate * 1000 / 60;
+      const requiredConc_mg_mL = (doseRate * weight) / fluidRate_mL_min;
+      const desiredPercent = requiredConc_mg_mL / 10;
+
+      const stock_mg_mL = stockPercent * 10;
+      const doseToAdd_mL = (requiredConc_mg_mL * fluidVolume * 1000) / stock_mg_mL;
+
+      output1.value = desiredPercent.toFixed(2);
+      output2.value = doseToAdd_mL.toFixed(2);
+    }
+  </script>
+
+</body>
+</html>
