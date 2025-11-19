@@ -142,9 +142,9 @@
 
       let fluidVolume_L;
       if (volumeUnit === "mL") {
-        fluidVolume_L = fluidVolumeInput / 1000;
+        fluidVolume_L = fluidVolumeInput / 1000;  // convert mL → L
       } else {
-        fluidVolume_L = fluidVolumeInput;
+        fluidVolume_L = fluidVolumeInput;  // already in L
       }
 
       const fluidRate_mL_min = fluidRate * 1000 / 60;
@@ -161,4 +161,3 @@
 
 </body>
 </html>
-
