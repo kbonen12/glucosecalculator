@@ -4,51 +4,16 @@
   <meta charset="UTF-8">
   <title>Glucose Infusion Rate Calculator</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #f4f4f4;
-    }
-    table {
-      border-collapse: collapse;
-      width: 500px;
-      background: #ffffff;
-      margin-bottom: 30px;
-    }
-    td, th {
-      padding: 8px;
-      border: 1px solid #ccc;
-    }
-    .green {
-      background-color: #90ee90;
-    }
-    .yellow {
-      background-color: #ffff99;
-    }
-    input, select {
-      width: 100%;
-      box-sizing: border-box;
-    }
-    input[readonly] {
-      background-color: #ffff99;
-      border: none;
-    }
-    .reference-table {
-      width: 100%;
-      max-width: 800px;
-      background: #fff;
-      table-layout: fixed;
-    }
-    .reference-table th, .reference-table td {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .reference-title {
-      font-weight: bold;
-      margin-top: 40px;
-      margin-bottom: 10px;
-    }
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
+    table { border-collapse: collapse; width: 500px; background: #ffffff; margin-bottom: 30px; }
+    td, th { padding: 8px; border: 1px solid #ccc; }
+    .green { background-color: #90ee90; }
+    .yellow { background-color: #ffff99; }
+    input, select { width: 100%; box-sizing: border-box; }
+    input[readonly] { background-color: #ffff99; border: none; }
+    .reference-table { width: 100%; max-width: 800px; background: #fff; table-layout: fixed; }
+    .reference-table th, .reference-table td { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .reference-title { font-weight: bold; margin-top: 40px; margin-bottom: 10px; }
   </style>
 </head>
 <body>
@@ -57,21 +22,37 @@
 
   <table>
     <tr>
-      <td class="green">Fluid Rate (L/hr)</td>
-      <td class="green"><input id="fluidRate" type="number" step="any" placeholder="0"></td>
+      <td class="green">Fluid Rate</td>
+      <td class="green">
+        <input id="fluidRate" type="number" step="any" placeholder="0">
+        <select id="fluidRateUnit">
+          <option value="mL/hr" selected>mL/hr</option>
+          <option value="L/hr">L/hr</option>
+        </select>
+      </td>
     </tr>
+    
     <tr>
       <td class="green">Dose Rate (mg/kg/min)</td>
       <td class="green"><input id="doseRate" type="number" step="any" placeholder="0"></td>
     </tr>
+
     <tr>
-      <td class="green">Body Weight (kg)</td>
-      <td class="green"><input id="weight" type="number" step="any" placeholder="0"></td>
+      <td class="green">Body Weight</td>
+      <td class="green">
+        <input id="weight" type="number" step="any" placeholder="0">
+        <select id="weightUnit">
+          <option value="kg" selected>kg</option>
+          <option value="lb">lb</option>
+        </select>
+      </td>
     </tr>
+
     <tr>
       <td class="yellow">Desired Solution (%)</td>
       <td class="yellow"><input id="desiredPercent" type="text" readonly></td>
     </tr>
+
     <tr>
       <td class="green">Fluid Volume</td>
       <td class="green">
@@ -82,10 +63,12 @@
         </select>
       </td>
     </tr>
+
     <tr>
       <td class="green">Stock Concentration (%)</td>
       <td class="green"><input id="stockPercent" type="number" step="any" placeholder="0"></td>
     </tr>
+
     <tr>
       <td class="yellow">Dose to Add (mL)</td>
       <td class="yellow"><input id="doseToAdd" type="text" readonly></td>
@@ -124,9 +107,11 @@
 
   <script>
     function calculate() {
-      const fluidRate = parseFloat(document.getElementById("fluidRate").value);
+      const fluidRateInput = parseFloat(document.getElementById("fluidRate").value);
+      const fluidRateUnit = document.getElementById("fluidRateUnit").value;
       const doseRate = parseFloat(document.getElementById("doseRate").value);
-      const weight = parseFloat(document.getElementById("weight").value);
+      const weightInput = parseFloat(document.getElementById("weight").value);
+      const weightUnit = document.getElementById("weightUnit").value;
       const fluidVolumeInput = parseFloat(document.getElementById("fluidVolume").value);
       const volumeUnit = document.getElementById("volumeUnit").value;
       const stockPercent = parseFloat(document.getElementById("stockPercent").value);
@@ -134,24 +119,48 @@
       const output1 = document.getElementById("desiredPercent");
       const output2 = document.getElementById("doseToAdd");
 
-      if ([fluidRate, doseRate, weight, fluidVolumeInput, stockPercent].some(x => isNaN(x) || x <= 0)) {
+      if ([fluidRateInput, doseRate, weightInput, fluidVolumeInput, stockPercent]
+          .some(x => isNaN(x) || x <= 0)) {
         output1.value = "Invalid input";
         output2.value = "Invalid input";
         return;
       }
 
-      let fluidVolume_L;
-      if (volumeUnit === "mL") {
-        fluidVolume_L = fluidVolumeInput / 1000;  // convert mL → L
+      // Convert fluid rate to mL/min
+      let fluidRate_mL_hr;
+      if (fluidRateUnit === "mL/hr") {
+        fluidRate_mL_hr = fluidRateInput;
       } else {
-        fluidVolume_L = fluidVolumeInput;  // already in L
+        fluidRate_mL_hr = fluidRateInput * 1000;
+      }
+      const fluidRate_mL_min = fluidRate_mL_hr / 60;
+
+      // Convert weight to kg
+      let weight_kg;
+      if (weightUnit === "kg") {
+        weight_kg = weightInput;
+      } else {
+        weight_kg = weightInput * 0.45359237;
       }
 
-      const fluidRate_mL_min = fluidRate * 1000 / 60;
-      const requiredConc_mg_mL = (doseRate * weight) / fluidRate_mL_min;
+      // Convert fluid volume to liters
+      let fluidVolume_L;
+      if (volumeUnit === "mL") {
+        fluidVolume_L = fluidVolumeInput / 1000;
+      } else {
+        fluidVolume_L = fluidVolumeInput;
+      }
+
+      // Required concentration in mg/mL
+      const requiredConc_mg_mL = (doseRate * weight_kg) / fluidRate_mL_min;
+
+      // Convert to percent solution
       const desiredPercent = requiredConc_mg_mL / 10;
 
+      // Stock mg/mL
       const stock_mg_mL = stockPercent * 10;
+
+      // Dose to add
       const doseToAdd_mL = (requiredConc_mg_mL * fluidVolume_L * 1000) / stock_mg_mL;
 
       output1.value = desiredPercent.toFixed(2);
