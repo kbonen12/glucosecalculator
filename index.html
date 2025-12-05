@@ -17,409 +17,198 @@
       --danger: #ef4444;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: system-ui, sans-serif;
       background: var(--bg-gradient);
-      color: var(--text-main);
-      min-height: 100vh;
       display: flex;
-      align-items: flex-start;
       justify-content: center;
-      padding: 40px 16px;
+      padding: 30px;
     }
 
-    .page-wrapper {
+    .layout {
       width: 100%;
       max-width: 1100px;
       display: grid;
-      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      grid-template-columns: 380px 1fr;
       gap: 24px;
     }
 
-    @media (max-width: 900px) {
-      .page-wrapper {
-        grid-template-columns: minmax(0, 1fr);
-      }
+    @media(max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
     }
 
     .card {
       background: var(--card-bg);
-      border-radius: 16px;
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.35);
-      padding: 24px 24px 28px;
-      border: 1px solid rgba(148, 163, 184, 0.2);
-    }
-
-    .card-header {
-      margin-bottom: 20px;
-    }
-
-    .title-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 1.6rem;
-      letter-spacing: 0.02em;
-      color: var(--text-main);
-    }
-
-    .badge {
-      font-size: 0.75rem;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: var(--accent-soft);
-      color: var(--accent);
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    .subtitle {
-      margin: 6px 0 0;
-      font-size: 0.9rem;
-      color: var(--text-muted);
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-    }
-
-    @media (min-width: 640px) {
-      .form-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .field.full-width {
-      grid-column: 1 / -1;
+      padding: 24px;
+      border-radius: 15px;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.1);
     }
 
     label {
       font-size: 0.85rem;
-      font-weight: 600;
+      font-weight: 700;
+      margin-bottom: 3px;
       color: var(--text-main);
+    }
+
+    .input-group {
+      margin-bottom: 14px;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
+      flex-direction: column;
+    }
+
+    .dual {
+      display: flex;
       gap: 6px;
     }
 
-    .label-hint {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    .input-row {
-      display: grid;
-      grid-template-columns: minmax(0, 2fr) minmax(90px, 1fr);
-      gap: 6px;
-    }
-
-    .input-basic {
-      width: 100%;
+    input, select {
       padding: 8px 10px;
       border-radius: 8px;
       border: 1px solid var(--border-soft);
       font-size: 0.9rem;
-      outline: none;
       background-color: var(--input-green);
-      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
-    }
-
-    .input-basic:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
-      background-color: #ecfdf5;
     }
 
     select {
-      background-color: #f9fafb;
+      background-color: #eef2ff;
       cursor: pointer;
     }
 
-    .input-output {
-      background-color: var(--output-yellow);
-      border-color: rgba(234, 179, 8, 0.5);
-    }
-
-    .input-output[readonly] {
-      cursor: default;
-    }
-
-    .input-error {
-      border-color: var(--danger) !important;
-      box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.25);
-      background-color: #fef2f2 !important;
-    }
-
-    .actions-row {
-      margin-top: 18px;
-      display: flex;
-      justify-content: flex-start;
-      gap: 10px;
-      align-items: center;
+    .output {
+      background-color: var(--output-yellow) !important;
+      border-color: rgba(200,170,0,0.5);
     }
 
     button {
+      margin-top: 14px;
+      width: 100%;
+      padding: 10px;
+      border-radius: 25px;
       border: none;
-      border-radius: 999px;
-      padding: 9px 18px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      cursor: pointer;
       background: var(--accent);
-      color: #f9fafb;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      box-shadow: 0 10px 18px rgba(37, 99, 235, 0.4);
-      transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
+      font-size: 1rem;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(37,99,235,0.4);
     }
 
     button:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 14px 26px rgba(37, 99, 235, 0.45);
-      background: #1d4ed8;
+      background:#1d4ed8;
     }
 
-    button:active {
-      transform: translateY(0);
-      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.35);
-    }
-
-    .btn-secondary {
-      background: #e5e7eb;
-      color: #111827;
-      box-shadow: none;
-    }
-
-    .btn-secondary:hover {
-      background: #d1d5db;
-      box-shadow: none;
-      transform: none;
-    }
-
-    .error-text {
-      font-size: 0.8rem;
-      color: var(--danger);
-      display: none;
-    }
-
-    .error-visible {
-      display: block;
-    }
-
-    /* Reference card */
-    .reference-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    .reference-title {
-      font-weight: 700;
-      font-size: 0.95rem;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--text-main);
-    }
-
-    .reference-pill {
-      font-size: 0.75rem;
-      padding: 2px 8px;
-      border-radius: 999px;
-      background: #f3f4f6;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    .reference-table {
+    table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.85rem;
-      border-radius: 12px;
+      border-radius: 8px;
       overflow: hidden;
       border: 1px solid var(--border-soft);
     }
 
-    .reference-table thead {
+    table thead {
       background: #f9fafb;
+      font-weight: 700;
     }
 
-    .reference-table th,
-    .reference-table td {
-      padding: 8px 10px;
+    th, td {
+      padding: 10px;
       border-bottom: 1px solid var(--border-soft);
+      font-size: 0.85rem;
       text-align: left;
-      /* allow wrapping instead of forced single line */
       white-space: normal;
     }
 
-    .reference-table tr:last-child td {
+    table tr:last-child td {
       border-bottom: none;
     }
 
-    .reference-note {
-      margin-top: 10px;
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      line-height: 1.4;
+    h2 {
+      margin-top: 0;
     }
   </style>
 </head>
 <body>
 
-  <div class="page-wrapper">
-    <!-- MAIN CALCULATOR CARD -->
+  <div class="layout">
+
+    <!-- LEFT PANEL (CALCULATOR) -->
     <div class="card">
-      <div class="card-header">
-        <div class="title-row">
-          <h1>Glucose Infusion Rate Calculator</h1>
-          <div class="badge">GIR Utility</div>
+
+      <h2>Glucose Infusion Rate Calculator</h2>
+
+      <div class="input-group">
+        <label>Body Weight</label>
+        <div class="dual">
+          <input id="weight" type="number" placeholder="0">
+          <select id="weightUnit">
+            <option value="kg" selected>kg</option>
+            <option value="lb">lb</option>
+          </select>
         </div>
-        <p class="subtitle">
-          Calculates the required glucose concentration and volume to add based on fluid rate, glucose dose, weight, and stock solution.
-        </p>
       </div>
 
-      <div class="form-grid">
-        <!-- Body Weight -->
-        <div class="field">
-          <label for="weight">
-            Body Weight
-          </label>
-          <div class="input-row">
-            <input id="weight" class="input-basic" type="number" step="any" placeholder="0">
-            <select id="weightUnit" class="input-basic">
-              <option value="kg" selected>kg</option>
-              <option value="lb">lb</option>
-            </select>
-          </div>
+      <div class="input-group">
+        <label>Fluid Rate</label>
+        <div class="dual">
+          <input id="fluidRate" type="number" placeholder="0">
+          <select id="fluidRateUnit">
+            <option value="mL/hr" selected>mL/hr</option>
+            <option value="L/hr">L/hr</option>
+          </select>
         </div>
-
-        <!-- Fluid Rate -->
-        <div class="field">
-          <label for="fluidRate">
-            Fluid Rate
-            <span class="label-hint">Default in mL/hr</span>
-          </label>
-          <div class="input-row">
-            <input id="fluidRate" class="input-basic" type="number" step="any" placeholder="0">
-            <select id="fluidRateUnit" class="input-basic">
-              <option value="mL/hr" selected>mL/hr</option>
-              <option value="L/hr">L/hr</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Glucose Dose Rate -->
-        <div class="field">
-          <label for="doseRate">
-            Glucose Dose Rate (mg/kg/min)
-          </label>
-          <input id="doseRate" class="input-basic" type="number" step="any" placeholder="0">
-        </div>
-
-        <!-- Glucose Stock Concentration -->
-        <div class="field">
-          <label for="stockPercent">
-            Glucose Stock Concentration (%)
-            <span class="label-hint">e.g., 50% dextrose</span>
-          </label>
-          <input id="stockPercent" class="input-basic" type="number" step="any" placeholder="0">
-        </div>
-
-        <!-- Fluid Volume -->
-        <div class="field">
-          <label for="fluidVolume">
-            Fluid Volume
-          </label>
-          <div class="input-row">
-            <input id="fluidVolume" class="input-basic" type="number" step="any" placeholder="0">
-            <select id="volumeUnit" class="input-basic">
-              <option value="mL" selected>mL</option>
-              <option value="L">L</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Desired Glucose Concentration -->
-       <div class="field">
-          <label for="stockPercent">
-            Glucose Stock Concentration (%)
-            <span class="label-hint">e.g., 50% dextrose</span>
-          </label>
-          <input id="stockPercent" class="input-basic" type="number" step="any" placeholder="0">
-        </div>
-
-        <!-- Fluid Volume -->
-        <div class="field">
-          <label for="fluidVolume">
-            Fluid Volume
-          </label>
-          <div class="input-row">
-            <input id="fluidVolume" class="input-basic" type="number" step="any" placeholder="0">
-            <select id="volumeUnit" class="input-basic">
-              <option value="mL" selected>mL</option>
-              <option value="L">L</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Desired Glucose Concentration -->
-        <div class="field full-width">
-          <label for="desiredPercent">
-            Desired Glucose Concentration (%)
-            <span class="label-hint">Calculated</span>
-          </label>
-          <input id="desiredPercent" class="input-basic input-output" type="text" readonly>
-        </div>
-
-        <!-- Dose to Add -->
-        <div class="field full-width">
-          <label for="doseToAdd">
-            Dose to Add (mL)
-            <span class="label-hint">Volume of stock solution to add</span>
-          </label>
-          <input id="doseToAdd" class="input-basic input-output" type="text" readonly>
-        </div>
-
-    <!-- REFERENCE CARD -->
-    <div class="card">
-      <div class="reference-header">
-        <div class="reference-title">
-          📘 Holliday–Segar Maintenance Fluids
-        </div>
-        <div class="reference-pill">Pediatric / Small Animal Reference</div>
       </div>
 
-      <table class="reference-table">
+      <div class="input-group">
+        <label>Glucose Dose Rate (mg/kg/min)</label>
+        <input id="doseRate" type="number" placeholder="0">
+      </div>
+
+      <div class="input-group">
+        <label>Glucose Stock Concentration (%)</label>
+        <input id="stockPercent" type="number" placeholder="e.g. 50 for D50W">
+      </div>
+
+      <div class="input-group">
+        <label>Fluid Volume</label>
+        <div class="dual">
+          <input id="fluidVolume" type="number" placeholder="0">
+          <select id="volumeUnit">
+            <option value="mL" selected>mL</option>
+            <option value="L">L</option>
+          </select>
+        </div>
+      </div>
+
+      <h3>Results</h3>
+
+      <div class="input-group">
+        <label>Desired Glucose Concentration (%)</label>
+        <input id="desiredPercent" class="output" readonly>
+      </div>
+
+      <div class="input-group">
+        <label>Dose to Add (mL)</label>
+        <input id="doseToAdd" class="output" readonly>
+      </div>
+
+      <button onclick="calculate()">Calculate</button>
+
+    </div>
+
+    <!-- RIGHT PANEL (REFERENCE TABLE) -->
+    <div class="card">
+
+      <h2>Holliday–Segar Maintenance Fluids</h2>
+
+      <table>
         <thead>
           <tr>
             <th>Weight Range</th>
-            <th>Daily Fluid Requirement</th>
-            <th>Hourly Fluid Requirement</th>
+            <th>Daily Requirement</th>
+            <th>Hourly Rate</th>
           </tr>
         </thead>
         <tbody>
@@ -430,131 +219,50 @@
           </tr>
           <tr>
             <td>11–20 kg</td>
-            <td>1,000 + 50 mL/kg/day for each kg &gt; 10</td>
-            <td>40 + 2 mL/kg/hr for each kg &gt; 10</td>
+            <td>1000 + 50 mL/kg >10 kg</td>
+            <td>40 + 2 mL/kg >10 kg</td>
           </tr>
           <tr>
-            <td>&gt; 20 kg</td>
-            <td>1,500 + 20 mL/kg/day for each kg &gt; 20</td>
-            <td>60 + 1 mL/kg/hr for each kg &gt; 20</td>
+            <td>>20 kg</td>
+            <td>1500 + 20 mL/kg >20 kg</td>
+            <td>60 + 1 mL/kg >20 kg</td>
           </tr>
         </tbody>
       </table>
 
-      <p class="reference-note">
-        Use this table to estimate maintenance fluid rates, then adjust the glucose infusion
-        to meet metabolic needs based on your calculated glucose dose rate and patient status.
-      </p>
     </div>
   </div>
 
-  <script>
-    function calculate() {
-      const fluidRateInput = parseFloat(document.getElementById("fluidRate").value);
-      const fluidRateUnit = document.getElementById("fluidRateUnit").value;
-      const doseRate = parseFloat(document.getElementById("doseRate").value);
-      const weightInput = parseFloat(document.getElementById("weight").value);
-      const weightUnit = document.getElementById("weightUnit").value;
-      const fluidVolumeInput = parseFloat(document.getElementById("fluidVolume").value);
-      const volumeUnit = document.getElementById("volumeUnit").value;
-      const stockPercent = parseFloat(document.getElementById("stockPercent").value);
+<script>
+function calculate() {
+  const fluidRateInput = parseFloat(document.getElementById("fluidRate").value);
+  const fluidRateUnit = document.getElementById("fluidRateUnit").value;
+  const doseRate = parseFloat(document.getElementById("doseRate").value);
+  const weightInput = parseFloat(document.getElementById("weight").value);
+  const weightUnit = document.getElementById("weightUnit").value;
+  const fluidVolumeInput = parseFloat(document.getElementById("fluidVolume").value);
+  const volumeUnit = document.getElementById("volumeUnit").value;
+  const stockPercent = parseFloat(document.getElementById("stockPercent").value);
 
-      const desiredPercentInput = document.getElementById("desiredPercent");
-      const doseToAddInput = document.getElementById("doseToAdd");
-      const errorMsg = document.getElementById("errorMsg");
+  if ([fluidRateInput, doseRate, weightInput, fluidVolumeInput, stockPercent]
+      .some(x => isNaN(x) || x <= 0)) return;
 
-      const inputs = [
-        "fluidRate",
-        "doseRate",
-        "weight",
-        "fluidVolume",
-        "stockPercent"
-      ].map(id => document.getElementById(id));
+  let fluidRate_mL_hr = fluidRateUnit === "mL/hr" ? fluidRateInput : fluidRateInput * 1000;
+  let fluidRate_mL_min = fluidRate_mL_hr / 60;
 
-      // Clear previous error styling
-      inputs.forEach(el => el.classList.remove("input-error"));
-      errorMsg.classList.remove("error-visible");
+  let weight_kg = weightUnit === "kg" ? weightInput : weightInput * 0.45359237;
+  let fluidVolume_L = volumeUnit === "mL" ? fluidVolumeInput / 1000 : fluidVolumeInput;
 
-      if ([fluidRateInput, doseRate, weightInput, fluidVolumeInput, stockPercent]
-          .some(x => isNaN(x) || x <= 0)) {
+  const requiredConc_mg_mL = (doseRate * weight_kg) / fluidRate_mL_min;
+  const desiredPercent = requiredConc_mg_mL / 10;
 
-        desiredPercentInput.value = "";
-        doseToAddInput.value = "";
+  const stock_mg_mL = stockPercent * 10;
+  const doseToAdd_mL = (requiredConc_mg_mL * fluidVolume_L * 1000) / stock_mg_mL;
 
-        inputs.forEach(el => {
-          const val = parseFloat(el.value);
-          if (isNaN(val) || val <= 0) {
-            el.classList.add("input-error");
-          }
-        });
-
-        errorMsg.classList.add("error-visible");
-        return;
-      }
-
-      // Convert fluid rate to mL/min
-      let fluidRate_mL_hr;
-      if (fluidRateUnit === "mL/hr") {
-        fluidRate_mL_hr = fluidRateInput;
-      } else {
-        fluidRate_mL_hr = fluidRateInput * 1000;
-      }
-      const fluidRate_mL_min = fluidRate_mL_hr / 60;
-
-      // Convert weight to kg
-      let weight_kg;
-      if (weightUnit === "kg") {
-        weight_kg = weightInput;
-      } else {
-        weight_kg = weightInput * 0.45359237;
-      }
-
-      // Convert fluid volume to liters
-      let fluidVolume_L;
-      if (volumeUnit === "mL") {
-        fluidVolume_L = fluidVolumeInput / 1000;
-      } else {
-        fluidVolume_L = fluidVolumeInput;
-      }
-
-      // Required concentration in mg/mL
-      const requiredConc_mg_mL = (doseRate * weight_kg) / fluidRate_mL_min;
-
-      // Convert to percent solution
-      const desiredPercent = requiredConc_mg_mL / 10;
-
-      // Stock mg/mL
-      const stock_mg_mL = stockPercent * 10;
-
-      // Dose to add
-      const doseToAdd_mL = (requiredConc_mg_mL * fluidVolume_L * 1000) / stock_mg_mL;
-
-      desiredPercentInput.value = desiredPercent.toFixed(2);
-      doseToAddInput.value = doseToAdd_mL.toFixed(2);
-    }
-
-    function resetForm() {
-      const ids = [
-        "fluidRate",
-        "doseRate",
-        "weight",
-        "fluidVolume",
-        "stockPercent",
-        "desiredPercent",
-        "doseToAdd"
-      ];
-      ids.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.value = "";
-        el?.classList?.remove("input-error");
-      });
-
-      document.getElementById("fluidRateUnit").value = "mL/hr";
-      document.getElementById("weightUnit").value = "kg";
-      document.getElementById("volumeUnit").value = "mL";
-      document.getElementById("errorMsg").classList.remove("error-visible");
-    }
-  </script>
+  document.getElementById("desiredPercent").value = desiredPercent.toFixed(2);
+  document.getElementById("doseToAdd").value = doseToAdd_mL.toFixed(2);
+}
+</script>
 
 </body>
 </html>
