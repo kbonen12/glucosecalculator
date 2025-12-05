@@ -272,7 +272,8 @@
       padding: 8px 10px;
       border-bottom: 1px solid var(--border-soft);
       text-align: left;
-      white-space: nowrap;
+      /* allow wrapping instead of forced single line */
+      white-space: normal;
     }
 
     .reference-table tr:last-child td {
@@ -298,11 +299,25 @@
           <div class="badge">GIR Utility</div>
         </div>
         <p class="subtitle">
-          Calculates the required glucose concentration and volume to add based on fluid rate, dose, weight, and stock solution.
+          Calculates the required glucose concentration and volume to add based on fluid rate, glucose dose, weight, and stock solution.
         </p>
       </div>
 
       <div class="form-grid">
+        <!-- Body Weight -->
+        <div class="field">
+          <label for="weight">
+            Body Weight
+          </label>
+          <div class="input-row">
+            <input id="weight" class="input-basic" type="number" step="any" placeholder="0">
+            <select id="weightUnit" class="input-basic">
+              <option value="kg" selected>kg</option>
+              <option value="lb">lb</option>
+            </select>
+          </div>
+        </div>
+
         <!-- Fluid Rate -->
         <div class="field">
           <label for="fluidRate">
@@ -326,27 +341,13 @@
           <input id="doseRate" class="input-basic" type="number" step="any" placeholder="0">
         </div>
 
-        <!-- Body Weight -->
+        <!-- Glucose Stock Concentration -->
         <div class="field">
-          <label for="weight">
-            Body Weight
+          <label for="stockPercent">
+            Glucose Stock Concentration (%)
+            <span class="label-hint">e.g., 50% dextrose</span>
           </label>
-          <div class="input-row">
-            <input id="weight" class="input-basic" type="number" step="any" placeholder="0">
-            <select id="weightUnit" class="input-basic">
-              <option value="kg" selected>kg</option>
-              <option value="lb">lb</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Desired Glucose Concentration -->
-        <div class="field">
-          <label for="desiredPercent">
-            Desired Glucose Concentration (%)
-            <span class="label-hint">Calculated</span>
-          </label>
-          <input id="desiredPercent" class="input-basic input-output" type="text" readonly>
+          <input id="stockPercent" class="input-basic" type="number" step="any" placeholder="0">
         </div>
 
         <!-- Fluid Volume -->
@@ -363,13 +364,13 @@
           </div>
         </div>
 
-        <!-- Glucose Stock Concentration -->
+        <!-- Desired Glucose Concentration -->
         <div class="field">
-          <label for="stockPercent">
-            Glucose Stock Concentration (%)
-            <span class="label-hint">e.g., 50% dextrose</span>
+          <label for="desiredPercent">
+            Desired Glucose Concentration (%)
+            <span class="label-hint">Calculated</span>
           </label>
-          <input id="stockPercent" class="input-basic" type="number" step="any" placeholder="0">
+          <input id="desiredPercent" class="input-basic input-output" type="text" readonly>
         </div>
 
         <!-- Dose to Add -->
@@ -406,9 +407,9 @@
       <table class="reference-table">
         <thead>
           <tr>
-            <th style="width: 30%;">Weight Range</th>
-            <th style="width: 35%;">Daily Fluid Requirement</th>
-            <th style="width: 35%;">Hourly Fluid Requirement</th>
+            <th>Weight Range</th>
+            <th>Daily Fluid Requirement</th>
+            <th>Hourly Fluid Requirement</th>
           </tr>
         </thead>
         <tbody>
@@ -419,13 +420,13 @@
           </tr>
           <tr>
             <td>11–20 kg</td>
-            <td>1,000 + 50 mL/kg/day for each kg &gt;10</td>
-            <td>40 + 2 mL/kg/hr for each kg &gt;10</td>
+            <td>1,000 + 50 mL/kg/day for each kg &gt; 10</td>
+            <td>40 + 2 mL/kg/hr for each kg &gt; 10</td>
           </tr>
           <tr>
             <td>&gt; 20 kg</td>
-            <td>1,500 + 20 mL/kg/day for each kg &gt;20</td>
-            <td>60 + 1 mL/kg/hr for each kg &gt;20</td>
+            <td>1,500 + 20 mL/kg/day for each kg &gt; 20</td>
+            <td>60 + 1 mL/kg/hr for each kg &gt; 20</td>
           </tr>
         </tbody>
       </table>
