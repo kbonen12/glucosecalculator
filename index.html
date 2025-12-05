@@ -4,106 +4,438 @@
   <meta charset="UTF-8">
   <title>Glucose Infusion Rate Calculator</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
-    table { border-collapse: collapse; width: 500px; background: #ffffff; margin-bottom: 30px; }
-    td, th { padding: 8px; border: 1px solid #ccc; }
-    .green { background-color: #90ee90; }
-    .yellow { background-color: #ffff99; }
-    input, select { width: 100%; box-sizing: border-box; }
-    input[readonly] { background-color: #ffff99; border: none; }
-    .reference-table { width: 100%; max-width: 800px; background: #fff; table-layout: fixed; }
-    .reference-table th, .reference-table td { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .reference-title { font-weight: bold; margin-top: 40px; margin-bottom: 10px; }
+    :root {
+      --bg-gradient: linear-gradient(135deg, #0f172a, #1e293b);
+      --card-bg: #ffffff;
+      --accent: #2563eb;
+      --accent-soft: #dbeafe;
+      --text-main: #0f172a;
+      --text-muted: #6b7280;
+      --border-soft: #e5e7eb;
+      --input-green: #dcfce7;
+      --output-yellow: #fef9c3;
+      --danger: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg-gradient);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 16px;
+    }
+
+    .page-wrapper {
+      width: 100%;
+      max-width: 1100px;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .page-wrapper {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.35);
+      padding: 24px 24px 28px;
+      border: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    .card-header {
+      margin-bottom: 20px;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.6rem;
+      letter-spacing: 0.02em;
+      color: var(--text-main);
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .subtitle {
+      margin: 6px 0 0;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 640px) {
+      .form-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .field.full-width {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .label-hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .input-row {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(90px, 1fr);
+      gap: 6px;
+    }
+
+    .input-basic {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border-soft);
+      font-size: 0.9rem;
+      outline: none;
+      background-color: var(--input-green);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+    }
+
+    .input-basic:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
+      background-color: #ecfdf5;
+    }
+
+    select {
+      background-color: #f9fafb;
+      cursor: pointer;
+    }
+
+    .input-output {
+      background-color: var(--output-yellow);
+      border-color: rgba(234, 179, 8, 0.5);
+    }
+
+    .input-output[readonly] {
+      cursor: default;
+    }
+
+    .input-error {
+      border-color: var(--danger) !important;
+      box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.25);
+      background-color: #fef2f2 !important;
+    }
+
+    .actions-row {
+      margin-top: 18px;
+      display: flex;
+      justify-content: flex-start;
+      gap: 10px;
+      align-items: center;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 9px 18px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: var(--accent);
+      color: #f9fafb;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 10px 18px rgba(37, 99, 235, 0.4);
+      transition: transform 0.1s ease, box-shadow 0.1s ease, background-color 0.1s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 26px rgba(37, 99, 235, 0.45);
+      background: #1d4ed8;
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.35);
+    }
+
+    .btn-secondary {
+      background: #e5e7eb;
+      color: #111827;
+      box-shadow: none;
+    }
+
+    .btn-secondary:hover {
+      background: #d1d5db;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .error-text {
+      font-size: 0.8rem;
+      color: var(--danger);
+      display: none;
+    }
+
+    .error-visible {
+      display: block;
+    }
+
+    /* Reference card */
+    .reference-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .reference-title {
+      font-weight: 700;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-main);
+    }
+
+    .reference-pill {
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .reference-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border-soft);
+    }
+
+    .reference-table thead {
+      background: #f9fafb;
+    }
+
+    .reference-table th,
+    .reference-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border-soft);
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .reference-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .reference-note {
+      margin-top: 10px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
   </style>
 </head>
 <body>
 
-  <h2>Glucose Infusion Rate Calculator</h2>
+  <div class="page-wrapper">
+    <!-- MAIN CALCULATOR CARD -->
+    <div class="card">
+      <div class="card-header">
+        <div class="title-row">
+          <h1>Glucose Infusion Rate Calculator</h1>
+          <div class="badge">GIR Utility</div>
+        </div>
+        <p class="subtitle">
+          Calculates the required glucose concentration and volume to add based on fluid rate, dose, weight, and stock solution.
+        </p>
+      </div>
 
-  <table>
-    <tr>
-      <td class="green">Fluid Rate</td>
-      <td class="green">
-        <input id="fluidRate" type="number" step="any" placeholder="0">
-        <select id="fluidRateUnit">
-          <option value="mL/hr" selected>mL/hr</option>
-          <option value="L/hr">L/hr</option>
-        </select>
-      </td>
-    </tr>
-    
-    <tr>
-      <td class="green">Glucose Dose Rate (mg/kg/min)</td>
-      <td class="green"><input id="doseRate" type="number" step="any" placeholder="0"></td>
-    </tr>
+      <div class="form-grid">
+        <!-- Fluid Rate -->
+        <div class="field">
+          <label for="fluidRate">
+            Fluid Rate
+            <span class="label-hint">Default in mL/hr</span>
+          </label>
+          <div class="input-row">
+            <input id="fluidRate" class="input-basic" type="number" step="any" placeholder="0">
+            <select id="fluidRateUnit" class="input-basic">
+              <option value="mL/hr" selected>mL/hr</option>
+              <option value="L/hr">L/hr</option>
+            </select>
+          </div>
+        </div>
 
-    <tr>
-      <td class="green">Body Weight</td>
-      <td class="green">
-        <input id="weight" type="number" step="any" placeholder="0">
-        <select id="weightUnit">
-          <option value="kg" selected>kg</option>
-          <option value="lb">lb</option>
-        </select>
-      </td>
-    </tr>
+        <!-- Glucose Dose Rate -->
+        <div class="field">
+          <label for="doseRate">
+            Glucose Dose Rate (mg/kg/min)
+          </label>
+          <input id="doseRate" class="input-basic" type="number" step="any" placeholder="0">
+        </div>
 
-    <tr>
-      <td class="yellow">Desired Glucose Concentration (%)</td>
-      <td class="yellow"><input id="desiredPercent" type="text" readonly></td>
-    </tr>
+        <!-- Body Weight -->
+        <div class="field">
+          <label for="weight">
+            Body Weight
+          </label>
+          <div class="input-row">
+            <input id="weight" class="input-basic" type="number" step="any" placeholder="0">
+            <select id="weightUnit" class="input-basic">
+              <option value="kg" selected>kg</option>
+              <option value="lb">lb</option>
+            </select>
+          </div>
+        </div>
 
-    <tr>
-      <td class="green">Fluid Volume</td>
-      <td class="green">
-        <input id="fluidVolume" type="number" step="any" placeholder="0">
-        <select id="volumeUnit">
-          <option value="mL" selected>mL</option>
-          <option value="L">L</option>
-        </select>
-      </td>
-    </tr>
+        <!-- Desired Glucose Concentration -->
+        <div class="field">
+          <label for="desiredPercent">
+            Desired Glucose Concentration (%)
+            <span class="label-hint">Calculated</span>
+          </label>
+          <input id="desiredPercent" class="input-basic input-output" type="text" readonly>
+        </div>
 
-    <tr>
-      <td class="green">Glucose Stock Concentration (%)</td>
-      <td class="green"><input id="stockPercent" type="number" step="any" placeholder="0"></td>
-    </tr>
+        <!-- Fluid Volume -->
+        <div class="field">
+          <label for="fluidVolume">
+            Fluid Volume
+          </label>
+          <div class="input-row">
+            <input id="fluidVolume" class="input-basic" type="number" step="any" placeholder="0">
+            <select id="volumeUnit" class="input-basic">
+              <option value="mL" selected>mL</option>
+              <option value="L">L</option>
+            </select>
+          </div>
+        </div>
 
-    <tr>
-      <td class="yellow">Dose to Add (mL)</td>
-      <td class="yellow"><input id="doseToAdd" type="text" readonly></td>
-    </tr>
-  </table>
+        <!-- Glucose Stock Concentration -->
+        <div class="field">
+          <label for="stockPercent">
+            Glucose Stock Concentration (%)
+            <span class="label-hint">e.g., 50% dextrose</span>
+          </label>
+          <input id="stockPercent" class="input-basic" type="number" step="any" placeholder="0">
+        </div>
 
-  <button onclick="calculate()">Calculate</button>
+        <!-- Dose to Add -->
+        <div class="field full-width">
+          <label for="doseToAdd">
+            Dose to Add (mL)
+            <span class="label-hint">Volume of stock solution to add</span>
+          </label>
+          <input id="doseToAdd" class="input-basic input-output" type="text" readonly>
+        </div>
+      </div>
 
-  <div class="reference-title">📘 Reference: Holliday-Segar Formula for Maintenance Fluids</div>
-  <table class="reference-table">
-    <thead>
-      <tr>
-        <th style="width: 25%;">Weight</th>
-        <th style="width: 37.5%;">Daily Fluid Requirement</th>
-        <th style="width: 37.5%;">Hourly Fluid Requirement</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>0–10 kg</td>
-        <td>100 mL/kg/day</td>
-        <td>4 mL/kg/hr</td>
-      </tr>
-      <tr>
-        <td>11–20 kg</td>
-        <td>1,000 + 50 mL/kg/day for each kg &gt;10</td>
-        <td>40 + 2 mL/kg/hr for each kg &gt;10</td>
-      </tr>
-      <tr>
-        <td>&gt; 20 kg</td>
-        <td>1,500 + 20 mL/kg/day for each kg &gt;20</td>
-        <td>60 + 1 mL/kg/hr for each kg &gt;20</td>
-      </tr>
-    </tbody>
-  </table>
+      <div class="actions-row">
+        <button type="button" onclick="calculate()">
+          <span>Calculate</span>
+          <span>➜</span>
+        </button>
+        <button type="button" class="btn-secondary" onclick="resetForm()">
+          Clear
+        </button>
+        <span id="errorMsg" class="error-text">Please enter positive values in all fields.</span>
+      </div>
+    </div>
+
+    <!-- REFERENCE CARD -->
+    <div class="card">
+      <div class="reference-header">
+        <div class="reference-title">
+          📘 Holliday–Segar Maintenance Fluids
+        </div>
+        <div class="reference-pill">Pediatric / Small Animal Reference</div>
+      </div>
+
+      <table class="reference-table">
+        <thead>
+          <tr>
+            <th style="width: 30%;">Weight Range</th>
+            <th style="width: 35%;">Daily Fluid Requirement</th>
+            <th style="width: 35%;">Hourly Fluid Requirement</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>0–10 kg</td>
+            <td>100 mL/kg/day</td>
+            <td>4 mL/kg/hr</td>
+          </tr>
+          <tr>
+            <td>11–20 kg</td>
+            <td>1,000 + 50 mL/kg/day for each kg &gt;10</td>
+            <td>40 + 2 mL/kg/hr for each kg &gt;10</td>
+          </tr>
+          <tr>
+            <td>&gt; 20 kg</td>
+            <td>1,500 + 20 mL/kg/day for each kg &gt;20</td>
+            <td>60 + 1 mL/kg/hr for each kg &gt;20</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p class="reference-note">
+        Use this table to estimate maintenance fluid rates, then adjust the glucose infusion
+        to meet metabolic needs based on your calculated glucose dose rate and patient status.
+      </p>
+    </div>
+  </div>
 
   <script>
     function calculate() {
@@ -116,13 +448,36 @@
       const volumeUnit = document.getElementById("volumeUnit").value;
       const stockPercent = parseFloat(document.getElementById("stockPercent").value);
 
-      const output1 = document.getElementById("desiredPercent");
-      const output2 = document.getElementById("doseToAdd");
+      const desiredPercentInput = document.getElementById("desiredPercent");
+      const doseToAddInput = document.getElementById("doseToAdd");
+      const errorMsg = document.getElementById("errorMsg");
+
+      const inputs = [
+        "fluidRate",
+        "doseRate",
+        "weight",
+        "fluidVolume",
+        "stockPercent"
+      ].map(id => document.getElementById(id));
+
+      // Clear previous error styling
+      inputs.forEach(el => el.classList.remove("input-error"));
+      errorMsg.classList.remove("error-visible");
 
       if ([fluidRateInput, doseRate, weightInput, fluidVolumeInput, stockPercent]
           .some(x => isNaN(x) || x <= 0)) {
-        output1.value = "Invalid input";
-        output2.value = "Invalid input";
+
+        desiredPercentInput.value = "";
+        doseToAddInput.value = "";
+
+        inputs.forEach(el => {
+          const val = parseFloat(el.value);
+          if (isNaN(val) || val <= 0) {
+            el.classList.add("input-error");
+          }
+        });
+
+        errorMsg.classList.add("error-visible");
         return;
       }
 
@@ -163,8 +518,30 @@
       // Dose to add
       const doseToAdd_mL = (requiredConc_mg_mL * fluidVolume_L * 1000) / stock_mg_mL;
 
-      output1.value = desiredPercent.toFixed(2);
-      output2.value = doseToAdd_mL.toFixed(2);
+      desiredPercentInput.value = desiredPercent.toFixed(2);
+      doseToAddInput.value = doseToAdd_mL.toFixed(2);
+    }
+
+    function resetForm() {
+      const ids = [
+        "fluidRate",
+        "doseRate",
+        "weight",
+        "fluidVolume",
+        "stockPercent",
+        "desiredPercent",
+        "doseToAdd"
+      ];
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.value = "";
+        el?.classList?.remove("input-error");
+      });
+
+      document.getElementById("fluidRateUnit").value = "mL/hr";
+      document.getElementById("weightUnit").value = "kg";
+      document.getElementById("volumeUnit").value = "mL";
+      document.getElementById("errorMsg").classList.remove("error-visible");
     }
   </script>
 
