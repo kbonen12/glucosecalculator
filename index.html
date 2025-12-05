@@ -365,7 +365,30 @@
         </div>
 
         <!-- Desired Glucose Concentration -->
+       <div class="field">
+          <label for="stockPercent">
+            Glucose Stock Concentration (%)
+            <span class="label-hint">e.g., 50% dextrose</span>
+          </label>
+          <input id="stockPercent" class="input-basic" type="number" step="any" placeholder="0">
+        </div>
+
+        <!-- Fluid Volume -->
         <div class="field">
+          <label for="fluidVolume">
+            Fluid Volume
+          </label>
+          <div class="input-row">
+            <input id="fluidVolume" class="input-basic" type="number" step="any" placeholder="0">
+            <select id="volumeUnit" class="input-basic">
+              <option value="mL" selected>mL</option>
+              <option value="L">L</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Desired Glucose Concentration -->
+        <div class="field full-width">
           <label for="desiredPercent">
             Desired Glucose Concentration (%)
             <span class="label-hint">Calculated</span>
@@ -381,19 +404,6 @@
           </label>
           <input id="doseToAdd" class="input-basic input-output" type="text" readonly>
         </div>
-      </div>
-
-      <div class="actions-row">
-        <button type="button" onclick="calculate()">
-          <span>Calculate</span>
-          <span>➜</span>
-        </button>
-        <button type="button" class="btn-secondary" onclick="resetForm()">
-          Clear
-        </button>
-        <span id="errorMsg" class="error-text">Please enter positive values in all fields.</span>
-      </div>
-    </div>
 
     <!-- REFERENCE CARD -->
     <div class="card">
