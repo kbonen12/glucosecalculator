@@ -26,11 +26,12 @@
       padding: 30px;
     }
 
+    /* 🔥 Updated width ratio */
     .layout {
       width: 100%;
-      max-width: 1100px;
+      max-width: 1200px;
       display: grid;
-      grid-template-columns: 380px 1fr;
+      grid-template-columns: 65% 35%;
       gap: 24px;
     }
 
@@ -40,7 +41,7 @@
 
     .card {
       background: var(--card-bg);
-      padding: 24px;
+      padding: 26px;
       border-radius: 15px;
       box-shadow: 0 18px 40px rgba(0,0,0,0.25);
       border: 1px solid rgba(255,255,255,0.1);
@@ -54,21 +55,21 @@
     }
 
     .input-group {
-      margin-bottom: 14px;
+      margin-bottom: 16px;
       display: flex;
       flex-direction: column;
     }
 
     .dual {
       display: flex;
-      gap: 6px;
+      gap: 8px;
     }
 
     input, select {
-      padding: 8px 10px;
+      padding: 10px 12px;
       border-radius: 8px;
       border: 1px solid var(--border-soft);
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       background-color: var(--input-green);
     }
 
@@ -83,10 +84,10 @@
     }
 
     button {
-      margin-top: 14px;
+      margin-top: 18px;
       width: 100%;
-      padding: 10px;
-      border-radius: 25px;
+      padding: 12px;
+      border-radius: 26px;
       border: none;
       background: var(--accent);
       font-size: 1rem;
@@ -168,7 +169,7 @@
 
       <div class="input-group">
         <label>Glucose Stock Concentration (%)</label>
-        <input id="stockPercent" type="number" placeholder="e.g. 50 for D50W">
+        <input id="stockPercent" type="number" placeholder="e.g. 50">
       </div>
 
       <div class="input-group">
@@ -219,18 +220,19 @@
           </tr>
           <tr>
             <td>11–20 kg</td>
-            <td>1000 + 50 mL/kg >10 kg</td>
-            <td>40 + 2 mL/kg >10 kg</td>
+            <td>1,000 + 50 mL/kg >10kg</td>
+            <td>40 + 2 mL/kg >10kg</td>
           </tr>
           <tr>
             <td>>20 kg</td>
-            <td>1500 + 20 mL/kg >20 kg</td>
-            <td>60 + 1 mL/kg >20 kg</td>
+            <td>1,500 + 20 mL/kg >20kg</td>
+            <td>60 + 1 mL/kg >20kg</td>
           </tr>
         </tbody>
       </table>
 
     </div>
+
   </div>
 
 <script>
@@ -255,7 +257,6 @@ function calculate() {
 
   const requiredConc_mg_mL = (doseRate * weight_kg) / fluidRate_mL_min;
   const desiredPercent = requiredConc_mg_mL / 10;
-
   const stock_mg_mL = stockPercent * 10;
   const doseToAdd_mL = (requiredConc_mg_mL * fluidVolume_L * 1000) / stock_mg_mL;
 
