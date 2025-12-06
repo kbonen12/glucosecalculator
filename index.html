@@ -26,14 +26,13 @@
       padding: 30px;
     }
 
-    /* 🔥 Updated width ratio */
     .layout {
-      width: 100%;
-      max-width: 1200px;
-      display: grid;
-      grid-template-columns: 65% 35%;
-      gap: 24px;
-    }
+  width: 100%;
+  max-width: 1200px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;  /* equal width columns */
+  gap: 24px;
+}
 
     @media(max-width: 900px) {
       .layout { grid-template-columns: 1fr; }
